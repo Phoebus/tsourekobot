@@ -1,0 +1,4 @@
+*.txt
+*.mp3
+botinfo.json
+__pycache__/
