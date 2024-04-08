@@ -29,7 +29,7 @@ tracemalloc.start()
 
 @bot.event
 async def on_ready():
-    print("bot online")
+    print("bot online!")
     
     #while True:
        # await playSong()
