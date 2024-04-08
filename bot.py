@@ -3,7 +3,6 @@ import json
 import random
 import utilities
 import asyncio
-import tracemalloc
 import re
 
 from discord.ext import commands
@@ -28,7 +27,8 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     
-    print("bot online!$$")
+
+    print("bot online!!!")
     
     #need to create a command that enables and disables the bot's function to join voice channels.
 
