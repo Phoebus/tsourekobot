@@ -24,7 +24,7 @@ def setupDurations(data: dict) -> list:
 
     songs = []
 
-    for name in data['soundsLength']:
+    for name in data['sounds']:
         songs.append(name)
     
     return songs
