@@ -30,6 +30,8 @@ async def on_ready():
     
     print("bot online!")
     
+    #need to create a command that enables and disables the bot's function to join voice channels.
+
     while True:
         await playSong()
         await countdown()
