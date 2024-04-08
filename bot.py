@@ -25,8 +25,6 @@ countdownTimer = 60.0
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-tracemalloc.start()
-
 @bot.event
 async def on_ready():
     
@@ -94,7 +92,5 @@ async def countdown():
     while time:
         time -= 1
         await asyncio.sleep(1)
-    
-    print(tracemalloc.get_traced_memory())
 
 bot.run(TOKEN)
