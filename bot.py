@@ -42,7 +42,7 @@ async def on_message(message):
     
     await bot.process_commands(message)   
 
-@bot.command()
+@bot.command(help = "This command will either enable or disable the bot's behaviour. On activation the bot will join a voice channel every time the countdown ends. For info on how to change the countdown timer use !help countdown")
 async def activate(ctx):
 
     global active
@@ -55,7 +55,7 @@ async def activate(ctx):
 
     return
 
-@bot.command()
+@bot.command(help = "Specify every how many seconds the bot will scan the voice channels and join the one with the most members. The number should be a positive integer")
 async def countdown(ctx, newTimer):
 
     global countdownTimer
