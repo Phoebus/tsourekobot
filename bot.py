@@ -3,6 +3,7 @@ import json
 import random
 import utilities
 import asyncio
+import re
 
 from discord.ext import commands
 from discord import FFmpegPCMAudio
@@ -19,7 +20,7 @@ serverid = int(data['goonserverid'])
 testingserverid = int(data['testingserverid'])
 songs = utilities.setupDurations(data)
 populatedChannels = []
-countdownTimer = 1800
+countdownTimer = 60.0
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
