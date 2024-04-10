@@ -3,7 +3,6 @@ import json
 import random
 import utilities
 import asyncio
-import re
 
 from discord.ext import commands
 from discord import FFmpegPCMAudio
@@ -18,19 +17,18 @@ with open ('botinfo.json', 'r') as read_file:
 TOKEN = data['token']
 serverid = int(data['goonserverid'])
 testingserverid = int(data['testingserverid'])
+countdownTimer = int(data['countdownTimer'])
+
 songs = utilities.setupDurations(data)
 populatedChannels = []
-countdownTimer = 60.0
+active = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
-    
 
     print("bot online!!!")
-    
-    #need to create a command that enables and disables the bot's function to join voice channels.
 
     while True:
         await playSong()
@@ -44,23 +42,61 @@ async def on_message(message):
     
     await bot.process_commands(message)   
 
-@bot.command()
+@bot.command(help = "This command will either enable or disable the bot's behaviour. On activation the bot will join a voice channel every time the countdown ends. For info on how to change the countdown timer use !help countdown")
+async def activate(ctx):
+
+    global active
+    active = not active
+
+    if active:
+        await ctx.reply('The bot will now join channels automatically')
+    else:
+        await ctx.reply('The bot has been deactivated')
+
+    return
+
+@bot.command(help = "Specify every how many seconds the bot will scan the voice channels and join the one with the most members. The number should be a positive integer")
 async def countdown(ctx, newTimer):
 
-    #add try except for when users dont give correct arguements!
+    global countdownTimer
 
-    newTimer = int(newTimer)
+    #if the user gives a string
+    try:
+        newTimer = int(newTimer)
+    except:
+        await ctx.reply('Please choose a valid timer. The format should be `!countdown (positive Integer)`')
+        return
 
+    #if for whatever reason the message is from the bot
     if ctx.author == bot:
         return
     
+    #if the user gives a negative number
     if newTimer < 0:
-        await ctx.reply("To countdown πρεπει να ειναι θετικος αριθμος ΖΩΟΟΟΟΟ")
+        await ctx.reply('Please choose a valid timer. The format should be `!countdown (positive Integer)`')
         return
     
-    print(newTimer)
+    minutes, seconds = divmod(newTimer, 60)
+
+    await ctx.reply('Countdown timer set to ' + str(minutes) + ' minutes and ' + str(seconds) + ' seconds.' )
+
+    countdownTimer = newTimer
+
+    with open('botinfo.json') as f:
+        temp = json.load(f)
+    
+    temp['countdownTimer'] = str(newTimer)
+
+    with open('botinfo.json', 'w') as f:
+        json.dump(temp, f, ensure_ascii=False, indent=4)
 
 async def playSong():
+
+    global active
+
+    if not active:
+        print("cycle skipped")
+        return
 
     #search for all the channels that have members in them
     populatedChannels = utilities.checkChannels(bot, testingserverid)
@@ -87,7 +123,7 @@ async def playSong():
 
 async def countdown():
 
-    print("entered countdown!")
+    print("entered countdown!\nduration: " + str(countdownTimer) + " seconds")
 
     time = countdownTimer
 
