@@ -20,7 +20,7 @@ serverid = int(data['goonserverid'])
 testingserverid = int(data['testingserverid'])
 songs = utilities.setupDurations(data)
 populatedChannels = []
-countdownTimer = 60.0
+countdownTimer = int(data['countdownTimer'])
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
@@ -67,6 +67,14 @@ async def countdown(ctx, newTimer):
 
     await ctx.reply('Countdown timer set to ' + str(minutes) + ' minutes and ' + str(seconds) + ' seconds.' )
 
+    with open('botinfo.json') as f:
+        temp = json.load(f)
+    
+    temp['countdownTimer'] = str(newTimer)
+
+    with open('botinfo.json', 'w') as f:
+        json.dump(temp, f, ensure_ascii=False, indent=4)
+
 async def playSong():
 
     #search for all the channels that have members in them
@@ -94,7 +102,7 @@ async def playSong():
 
 async def countdown():
 
-    print("entered countdown!")
+    print("entered countdown!\nduration: " + str(countdownTimer) + " seconds")
 
     time = countdownTimer
 
