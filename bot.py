@@ -47,18 +47,25 @@ async def on_message(message):
 @bot.command()
 async def countdown(ctx, newTimer):
 
-    #add try except for when users dont give correct arguements!
+    #if the user gives a string
+    try:
+        newTimer = int(newTimer)
+    except:
+        await ctx.reply('Please choose a valid timer. The format should be `!countdown (positive Integer)`')
+        return
 
-    newTimer = int(newTimer)
-
+    #if for whatever reason the message is from the bot
     if ctx.author == bot:
         return
     
+    #if the user gives a negative number
     if newTimer < 0:
-        await ctx.reply("To countdown πρεπει να ειναι θετικος αριθμος ΖΩΟΟΟΟΟ")
+        await ctx.reply('Please choose a valid timer. The format should be `!countdown (positive Integer)`')
         return
     
-    print(newTimer)
+    minutes, seconds = divmod(newTimer, 60)
+
+    await ctx.reply('Countdown timer set to ' + str(minutes) + ' minutes and ' + str(seconds) + ' seconds.' )
 
 async def playSong():
 
