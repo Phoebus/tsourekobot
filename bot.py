@@ -3,7 +3,6 @@ import json
 import random
 import utilities
 import asyncio
-import re
 
 from discord.ext import commands
 from discord import FFmpegPCMAudio
@@ -18,19 +17,18 @@ with open ('botinfo.json', 'r') as read_file:
 TOKEN = data['token']
 serverid = int(data['goonserverid'])
 testingserverid = int(data['testingserverid'])
+countdownTimer = int(data['countdownTimer'])
+
 songs = utilities.setupDurations(data)
 populatedChannels = []
-countdownTimer = int(data['countdownTimer'])
+active = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
-    
 
     print("bot online!!!")
-    
-    #need to create a command that enables and disables the bot's function to join voice channels.
 
     while True:
         await playSong()
@@ -45,7 +43,22 @@ async def on_message(message):
     await bot.process_commands(message)   
 
 @bot.command()
+async def activate(ctx):
+
+    global active
+    active = not active
+
+    if active:
+        await ctx.reply('The bot will now join channels automatically')
+    else:
+        await ctx.reply('The bot has been deactivated')
+
+    return
+
+@bot.command()
 async def countdown(ctx, newTimer):
+
+    global countdownTimer
 
     #if the user gives a string
     try:
@@ -67,6 +80,8 @@ async def countdown(ctx, newTimer):
 
     await ctx.reply('Countdown timer set to ' + str(minutes) + ' minutes and ' + str(seconds) + ' seconds.' )
 
+    countdownTimer = newTimer
+
     with open('botinfo.json') as f:
         temp = json.load(f)
     
@@ -76,6 +91,12 @@ async def countdown(ctx, newTimer):
         json.dump(temp, f, ensure_ascii=False, indent=4)
 
 async def playSong():
+
+    global active
+
+    if not active:
+        print("cycle skipped")
+        return
 
     #search for all the channels that have members in them
     populatedChannels = utilities.checkChannels(bot, testingserverid)
