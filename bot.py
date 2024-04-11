@@ -99,7 +99,7 @@ async def playSong():
         return
 
     #search for all the channels that have members in them
-    populatedChannels = utilities.checkChannels(bot, testingserverid)
+    populatedChannels = utilities.checkChannels(bot, serverid)
 
     #if no channels with members exist start the countdown, and check again after the countdown ends.
     if len(populatedChannels) == 0:

@@ -15,7 +15,7 @@ def mostPopulated(populatedChannels):
     mostPopulatedChannel = populatedChannels[0]
 
     for channel in populatedChannels:
-        if channel.members > mostPopulatedChannel.members:
+        if len(channel.members) > len(mostPopulatedChannel.members):
             mostPopulatedChannel = channel
     
     return mostPopulatedChannel
