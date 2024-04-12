@@ -21,9 +21,9 @@ testingserverid: int = int(data['testingserverid'])
 countdownTimer: int = int(data['countdownTimer'])
 SteamKey: str = data['steamkey']
 
-songs = utilities.setupDurations(data)
-populatedChannels = []
-active = True
+songs: list = utilities.setupDurations(data)
+populatedChannels: list = []
+active: bool = False
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
@@ -31,6 +31,13 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
 
     print("bot online!!!")
+
+    response = requests.get('http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=730&count=6&maxlength=300&format=json')
+    responseText = json.loads(response.text)
+    #print(responseText['appnews']['newsitems'][0]['url'])
+
+    for news in responseText['appnews']['newsitems']:
+        print(news['url'])
 
     while True:
         await playSong()
