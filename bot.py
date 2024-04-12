@@ -3,6 +3,7 @@ import json
 import random
 import utilities
 import asyncio
+import requests
 
 from discord.ext import commands
 from discord import FFmpegPCMAudio
@@ -14,10 +15,11 @@ bot = discord.Client(intents = intents)
 with open ('botinfo.json', 'r') as read_file:
     data = json.load(read_file)
 
-TOKEN = data['token']
-serverid = int(data['goonserverid'])
-testingserverid = int(data['testingserverid'])
-countdownTimer = int(data['countdownTimer'])
+TOKEN: str = data['token']
+serverid: int = int(data['goonserverid'])
+testingserverid: int = int(data['testingserverid'])
+countdownTimer: int = int(data['countdownTimer'])
+SteamKey: str = data['steamkey']
 
 songs = utilities.setupDurations(data)
 populatedChannels = []
